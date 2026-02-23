@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>20 Questions - AI Guessing Game</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="stars"></div>
+    <div class="container">
+        <header class="header">
+            <h1 class="title">20 Questions</h1>
+            <p class="subtitle">Think of a famous person, and I'll try to guess who it is!</p>
+        </header>
+
+        <div id="startScreen" class="screen active">
+            <div class="content-box">
+                <p class="instructions">Think of any famous person (real or fictional) and click Start to begin.</p>
+                <button id="startBtn" class="btn btn-primary">Start Game</button>
+            </div>
+        </div>
+
+        <div id="thinkingScreen" class="screen">
+            <div class="content-box">
+                <div class="thinking-animation">
+                    <div class="brain-icon">🧠</div>
+                </div>
+                <p class="instructions">Think of a famous person...</p>
+                <button id="readyBtn" class="btn btn-primary">I'm Ready!</button>
+            </div>
+        </div>
+
+        <div id="gameScreen" class="screen">
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressBar"></div>
+                <div class="progress-text">
+                    <span>Question <span id="questionNumber">1</span> of 20</span>
+                    <span id="remainingQuestions">19 remaining</span>
+                </div>
+            </div>
+
+            <div class="content-box question-box">
+                <div class="ai-indicator">
+                    <span class="ai-badge">AI</span>
+                    <span class="typing-indicator" id="typingIndicator">
+                        <span></span><span></span><span></span>
+                    </span>
+                </div>
+                <div class="question-context" id="questionContext"></div>
+                <div class="question-main" id="questionMain">Loading...</div>
+                
+                <div class="answer-buttons" id="answerButtons">
+                    <button class="btn btn-yes" data-answer="yes">Yes</button>
+                    <button class="btn btn-no" data-answer="no">No</button>
+                </div>
+            </div>
+
+            <div class="content-box history-box">
+                <h3 class="history-title">Questions asked so far</h3>
+                <div id="historyList" class="history-list">
+                    <p class="history-empty">No questions answered yet</p>
+                </div>
+            </div>
+        </div>
+
+        <div id="resultScreen" class="screen">
+            <div class="content-box result-box">
+                <div class="result-icon" id="resultIcon">🎉</div>
+                <h2 id="resultTitle" class="result-title">I got it!</h2>
+                <p id="resultMessage" class="result-message"></p>
+                <button id="playAgainBtn" class="btn btn-primary">Play Again</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/app.js"></script>
+</body>
+</html>
