@@ -50,6 +50,7 @@ public class GameService {
             }
 
             Always return valid JSON. Do not include any text outside the JSON structure.
+            If the text does not contain "}" at the end, then add it before sending.
             """;
 
     private static final String FIRST_QUESTION_PROMPT = 
@@ -150,28 +151,11 @@ public class GameService {
     private AiQuestionResponse callAiWithRetry(String userPrompt, String sessionId) throws com.fasterxml.jackson.core.JsonProcessingException {
         log.info("callAiWithRetry() - Attempting AI call for session {}", sessionId);
 
-        // When LLM does not give valid JSON, quite often it is because it omits the last '}'.
-        // So, here's a quick hack to add it if it is not present.
-        // TODO: Find a better alternative
-        String aiRawResponse = chatClient.prompt()
+        var response = chatClient.prompt()
                 .user(userPrompt)
                 .advisors(a -> a.param(ChatMemory.CONVERSATION_ID, sessionId))
                 .call()
-                .content();
-        // Add a trailing '}' if missing before deserialization
-        String fixedResponse = aiRawResponse == null ? "" : aiRawResponse.trim();
-        if (!fixedResponse.endsWith("}")) {
-            fixedResponse = fixedResponse + "}";
-            log.warn("AI response did not end with '}}'. Appended one for parsing safety.");
-        }
-        AiQuestionResponse response;
-        try {
-            response = com.fasterxml.jackson.databind.json.JsonMapper.builder().build()
-                    .readValue(fixedResponse, AiQuestionResponse.class);
-        } catch (com.fasterxml.jackson.core.JsonProcessingException e) {
-            log.error("Failed to parse AI response after fixing trailing '}}'", e);
-            throw e;
-        }
+                .entity(AiQuestionResponse.class);
 
         log.info("callAiWithRetry() - Successfully parsed AI response");
         return response;
